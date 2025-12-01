@@ -333,7 +333,7 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
         
         try {
             LocalDate date = LocalDate.parse(dateString);
-            String formattedDate = String.format("%d월 %d일 소비 내역",
+            String formattedDate = String.format("%d월 %d일 내역",
                 date.getMonthValue(), date.getDayOfMonth());
             selectedDateLabel.setText(formattedDate);
         } catch (Exception e) {
@@ -400,7 +400,7 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
     public void setYear() {
         Calendar current = Calendar.getInstance();
         int currentYear = current.get(Calendar.YEAR);
-        for (int i = currentYear - 10; i <= currentYear + 10; i++) {
+        for (int i = 2025; i <= currentYear + 10; i++) {
             yearCombo.addItem(i);
         }
         yearCombo.setSelectedItem(year);
