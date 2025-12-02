@@ -50,6 +50,7 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
     JButton analysisBtn = new JButton("분석");
     JButton calculatorBtn = new JButton("계산기");
     JButton goalBtn = new JButton("목표 관리");
+    JButton recurringBtn = new JButton("정기 거래");
     
     // 테마 변경 버튼
     JButton themeToggleBtn = new JButton("다크 모드");
@@ -103,10 +104,8 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
         nextBtn.setFont(fnt); selectPane.add(nextBtn);
         analysisBtn.setFont(fnt); selectPane.add(analysisBtn);
         calculatorBtn.setFont(fnt); selectPane.add(calculatorBtn);
-        
-        goalBtn.setFont(fnt);
-        goalBtn.addActionListener(this);
-        selectPane.add(goalBtn);
+        goalBtn.setFont(fnt); selectPane.add(goalBtn);
+        recurringBtn.setFont(fnt); selectPane.add(recurringBtn);
         
         // 테마 버튼 달기
         themeToggleBtn.setFont(new Font("맑은 고딕", Font.BOLD, 14));
@@ -135,6 +134,8 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
         monthCombo.addItemListener(this);
         analysisBtn.addActionListener(this);
         calculatorBtn.addActionListener(this);
+        goalBtn.addActionListener(this);
+        recurringBtn.addActionListener(this);
         
         // 5. JFrame 설정
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -294,6 +295,7 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
 
     public void loadMonthData() {
         try {
+        	apiService.applyRecurringTransactions(currentUser.getUserId(), this.year, this.month);
             this.currentMonthTransactions = apiService.getMonthlyTransactions(
                 currentUser.getUserId(), this.year, this.month
             );
@@ -472,6 +474,8 @@ public class CalendarSwing extends JFrame implements ItemListener, ActionListene
             SwingUtilities.invokeLater(() -> new Calculator());
         } else if (obj == goalBtn) {
         	new GoalView(this, currentUser, apiService, year, month).setVisible(true);
+        } else if (obj == recurringBtn) {
+            new RecurringView(this, currentUser, apiService).setVisible(true);
         } else if (obj == themeToggleBtn) { 
             // 테마 변경 버튼 클릭 시
             toggleTheme();
