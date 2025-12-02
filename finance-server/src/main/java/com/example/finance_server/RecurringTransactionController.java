@@ -14,9 +14,10 @@ public class RecurringTransactionController {
     @Autowired private RecurringTransactionRepository repository;
     @Autowired private TransactionRepository transactionRepository;
 
+    // findAll() -> findByUserId... 로 변경 
     @GetMapping("/user/{userId}")
     public List<RecurringTransaction> getList(@PathVariable int userId) {
-        return repository.findAll(); // 전체 조회
+        return repository.findByUserIdOrderByStartDateAsc(userId);
     }
 
     @PostMapping
@@ -25,24 +26,29 @@ public class RecurringTransactionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id, 
+            @RequestParam(required = false) Integer sYear, @RequestParam(required = false) Integer sMonth, @RequestParam(required = false) Integer sDay,
+            @RequestParam(required = false) Integer eYear, @RequestParam(required = false) Integer eMonth, @RequestParam(required = false) Integer eDay) {
+        
+        // (필요 시 여기서 transactionRepository.deleteTransactionsOutsideRange 호출 가능)
         repository.deleteById(id);
         return ResponseEntity.ok().build();
     }
     
-    // 기간 체크 후 내역 생성 로직
+    // 반영할 때도 내 것만 가져와서 처리하도록 최적화
     @PostMapping("/apply")
     public ResponseEntity<String> applyRecurringTransactions(@RequestParam int userId, @RequestParam int year, @RequestParam int month) {
-        List<RecurringTransaction> rules = repository.findAll();
+        // [수정] findAll() 대신 내 것만 가져오기
+        List<RecurringTransaction> rules = repository.findByUserIdOrderByStartDateAsc(userId);
         int count = 0;
         
         YearMonth currentYm = YearMonth.of(year, month);
         int lastDayOfMonth = currentYm.lengthOfMonth();
 
         for (RecurringTransaction rt : rules) {
+            // userId 체크 로직은 쿼리에서 이미 걸러졌지만, 이중 안전장치로 둠
             if (rt.getUserId() != userId) continue;
             
-            // 날짜가 없거나 형식이 이상하면 건너뜀 (null 방지)
             if (rt.getStartDate() == null || rt.getEndDate() == null) continue;
 
             LocalDate start = LocalDate.parse(rt.getStartDate()); 
@@ -51,13 +57,9 @@ public class RecurringTransactionController {
             YearMonth startYm = YearMonth.from(start);
             YearMonth endYm = YearMonth.from(end);
             
-            // 현재 달이 기간 내에 포함되는지 확인
             if (!currentYm.isBefore(startYm) && !currentYm.isAfter(endYm)) {
-                
-                // 시작일의 '일'자를 따옴
                 int targetDay = start.getDayOfMonth();
                 targetDay = Math.min(targetDay, lastDayOfMonth);
-                
                 String dateStr = String.format("%d-%02d-%02d", year, month, targetDay);
 
                 if (!transactionRepository.existsByUserIdAndDateAndContentAndAmount(
