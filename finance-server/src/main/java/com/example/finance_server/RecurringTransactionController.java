@@ -14,7 +14,7 @@ public class RecurringTransactionController {
     @Autowired private RecurringTransactionRepository repository;
     @Autowired private TransactionRepository transactionRepository;
 
-    // findAll() -> findByUserId... 로 변경 
+    //  findAll() -> findByUserId... 로 변경 (이제 내 것만 보임) 
     @GetMapping("/user/{userId}")
     public List<RecurringTransaction> getList(@PathVariable int userId) {
         return repository.findByUserIdOrderByStartDateAsc(userId);
@@ -25,6 +25,7 @@ public class RecurringTransactionController {
         return repository.save(rt);
     }
 
+    // [삭제 로직] (기존 유지)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id, 
             @RequestParam(required = false) Integer sYear, @RequestParam(required = false) Integer sMonth, @RequestParam(required = false) Integer sDay,
