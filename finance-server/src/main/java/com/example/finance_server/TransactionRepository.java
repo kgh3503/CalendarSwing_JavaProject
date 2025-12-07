@@ -36,6 +36,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     double findTotalSumByType(@Param("userId") int userId, @Param("datePrefix") String datePrefix, @Param("type") String type);
     @Query("SELECT COALESCE(SUM(t.amount), 0.0) FROM Transaction t WHERE t.userId = :userId AND t.date LIKE CONCAT(:datePrefix, '%') AND t.type = :type AND t.category = :category")
     double findTotalSumByTypeAndCategory(@Param("userId") int userId, @Param("datePrefix") String datePrefix, @Param("type") String type, @Param("category") String category);
+    
+    // 기존 쿼리(getAverageCategorySummaryExcludingUser) 대신 모든 사용자 평균을 구하는 쿼리 추가
+    @Query("SELECT t.category, AVG(t.amount) as averageAmount FROM Transaction t WHERE t.date LIKE CONCAT(:datePrefix, '%') AND t.type = :type GROUP BY t.category")
+    List<Object[]> getAverageCategorySummaryAllUsers(@Param("datePrefix") String datePrefix, @Param("type") String type);
+    
     @Query("SELECT t.category, AVG(t.amount) as averageAmount FROM Transaction t WHERE t.userId != :userId AND t.date LIKE CONCAT(:datePrefix, '%') AND t.type = :type GROUP BY t.category")
     List<Object[]> getAverageCategorySummaryExcludingUser(@Param("userId") int userId, @Param("datePrefix") String datePrefix, @Param("type") String type);
 }

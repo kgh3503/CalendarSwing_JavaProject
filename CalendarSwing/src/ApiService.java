@@ -13,6 +13,7 @@ import java.util.Map;
 public class ApiService {
 
     private static final String SERVER_URL = "http://localhost:8080/api"; 
+    // private static final String SERVER_URL = "http://10.20.36.106:8080/api";
 
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -206,9 +207,11 @@ public class ApiService {
         return null;
     }
 
-    public Map<String, Double> getAverageCategorySummary(int userId, int year, int month, String type) {
+    // 수정됨 userId 제거: 전체 사용자의 평균을 가져오기 위함
+    public Map<String, Double> getAverageCategorySummary(int year, int month, String type) {
         try {
-            String url = SERVER_URL + "/transactions/summary/average/" + userId + "/" + year + "/" + month + "?type=" + type;
+            // URL에서 userId 파라미터 제거
+            String url = SERVER_URL + "/transactions/summary/average/" + year + "/" + month + "?type=" + type;
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
             
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -254,7 +257,6 @@ public class ApiService {
         }
     }
 
-    // ▼▼▼ [완전 구현] 시작일/종료일 6개 파라미터 전송 ▼▼▼
     public boolean deleteRecurringTransaction(int id, int sYear, int sMonth, int sDay, int eYear, int eMonth, int eDay) {
         try {
             String url = String.format(SERVER_URL + "/recurring/%d?sYear=%d&sMonth=%d&sDay=%d&eYear=%d&eMonth=%d&eDay=%d", 

@@ -60,7 +60,7 @@ public class TransactionController {
         return transactionRepository.findByUserIdAndDateStartingWithOrderByDateAsc(userId, datePrefix);
     }
 
-    // AnalysisView의 '분석' 기능을 위한 API
+    // AnalysisView의 분석 기능을 위한 API
 
     @GetMapping("/summary/monthly/{userId}/{year}/{month}")
     public Map<String, Double> getMonthlySummary(
@@ -129,19 +129,19 @@ public class TransactionController {
     /**
      * '나'를 제외한 다른 모든 사용자의 '카테고리별 평균 지출'을 조회
      * (AnalysisView의 '사용자 비교' 기능이 호출할 API)
+     * userId 제거 및 전체 평균 로직 적용
      */
-    @GetMapping("/summary/average/{userId}/{year}/{month}")
+    @GetMapping("/summary/average/{year}/{month}")
     public Map<String, Double> getAverageCategorySummary(
-            @PathVariable int userId,
             @PathVariable int year,
             @PathVariable int month,
             @RequestParam String type) { // ?type=지출
         
         String datePrefix = String.format("%d-%02d-", year, month);
         
-        // 1단계에서 만든 쿼리 호출
-        List<Object[]> rawResult = transactionRepository.getAverageCategorySummaryExcludingUser(
-                userId, datePrefix, type
+        // getAverageCategorySummaryAllUsers 호출 (모든 사용자 대상)
+        List<Object[]> rawResult = transactionRepository.getAverageCategorySummaryAllUsers(
+                datePrefix, type
         );
         
         return rawResult.stream()

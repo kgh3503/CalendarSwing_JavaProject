@@ -82,8 +82,9 @@ public class AnalysisView extends JDialog implements ActionListener {
                 currentUser.getUserId(), year, month, comparisonType
             );
 
+            // [수정됨] userId 인수 제거 (전체 사용자 평균 요청)
             Map<String, Double> averageData = apiService.getAverageCategorySummary(
-                currentUser.getUserId(), year, month, comparisonType
+                year, month, comparisonType
             );
             
             // ComparisonView 창 열기
