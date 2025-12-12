@@ -22,4 +22,7 @@ finance-server 프로젝트 한 개로 합침. (기존에는 CalendarSwing, fina
 
 2. view 패키지에서 CalendarSwing.java 실행 -> 회원가입 후 프로그램 사용 가능
 
+<img width="482" height="1036" alt="image" src="https://github.com/user-attachments/assets/e9cec192-4edf-4037-9d35-716827077fe5" />
+
+
 
