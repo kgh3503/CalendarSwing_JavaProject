@@ -1,3 +1,4 @@
+package com.example.finance_server.client.dto;
 import com.google.gson.annotations.SerializedName; 
 
 public class User {

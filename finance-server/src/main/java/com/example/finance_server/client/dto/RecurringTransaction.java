@@ -1,3 +1,4 @@
+package com.example.finance_server.client.dto;
 public class RecurringTransaction {
     // 클라이언트용 DTO (서버와 필드명이 일치해야 함)
 

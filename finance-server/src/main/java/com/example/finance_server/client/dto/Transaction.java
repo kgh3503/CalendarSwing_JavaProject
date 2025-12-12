@@ -1,3 +1,4 @@
+package com.example.finance_server.client.dto;
 public class Transaction {
     
     private int id;        // 거래 고유 번호

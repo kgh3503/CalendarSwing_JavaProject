@@ -1,3 +1,4 @@
+package com.example.finance_server.client.dto;
 public class GoalProgressDTO {
 
     // 서버의 DTO 필드명과 일치

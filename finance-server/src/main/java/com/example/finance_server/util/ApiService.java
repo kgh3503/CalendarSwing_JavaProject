@@ -1,3 +1,4 @@
+package com.example.finance_server.util;
 import com.example.finance_server.client.dto.Goal;
 import com.example.finance_server.client.dto.GoalProgressDTO;
 import com.example.finance_server.client.dto.RecurringTransaction;

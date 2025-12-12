@@ -1,31 +1,54 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.7'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'  // 🚨 수정됨: 3.5.7 -> 3.2.2 (존재하는 버전으로 변경)
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // 사용자님 Java 버전에 맞춤
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // 1. 스프링 부트 필수 (JPA, Web)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // 2. 테스트 및 롬복
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // 3. 데이터베이스 (MySQL)
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // 4. 사용자 편의 기능 (Gson, FlatLaf 테마)
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.formdev:flatlaf:3.5.4'
+
+    // 5. 엑셀 기능 (Apache POI 5.2.3 및 관련 라이브러리)
+    // 이 두 줄만 있으면 commons-io, commons-collections4, xmlbeans 등 다 알아서 설치됩니다.
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    
+    // 6. 추가 유틸리티 (SparseBitSet, CurvesAPI - POI가 필요로 할 수 있음)
+    implementation 'com.zaxxer:SparseBitSet:1.2'
+    implementation 'com.github.virtuald:curvesapi:1.07'
+
+    // 7. 로깅 및 XML 처리 (Jakarta, Log4j)
+    implementation 'org.apache.logging.log4j:log4j-core:2.21.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.21.1'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

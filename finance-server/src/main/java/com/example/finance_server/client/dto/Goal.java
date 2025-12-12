@@ -1,3 +1,5 @@
+package com.example.finance_server.client.dto;
+
 public class Goal {
     private int goalId;        // PK: 목표 식별자
     private int userId;        // FK: 사용자 ID
