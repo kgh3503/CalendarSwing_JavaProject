@@ -16,6 +16,7 @@
 <이클립스로 실행 권장>
 
 finance-server/src/main/java/com/example/finance_server 경로로 실행
+
 finance-server 프로젝트 한 개로 합침. (기존에는 CalendarSwing, finance-server 두 가지였음, 깃허브에 커밋을 위해서는 서버-클라이언트를 하나의 프로젝트 안에 넣어야했기에 수정을 진행함)
 
 1. FinanceServerApplication.java -> 우클릭 -> Run As -> Java Application 클릭 ====> 서버 실행
